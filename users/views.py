@@ -24,7 +24,13 @@ class LoginView(CreateAPIView):
     permission_classes = [AllowAny, ]
     serializer_class = LoginSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> Response:
+        """
+        The post function overrides the parent class method to ensure that the POST request is correctly processed.
+        It implements the functional of finding or creating a user by the entered phone number,
+        generating a 4-digit digital token for confirming the authentication
+        and sending it as an SMS to the entered phone number.
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -90,7 +96,7 @@ class ProfileView(RetrieveUpdateAPIView):
         return self.request.user
 
     @extend_schema(deprecated=True)
-    def put(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs) -> None:
         """
         The put function overrides the parent class method. Disables its functionality, since the use of the method
         is not provided for by this implementation. Raises a NotImplementedError when accessed.
