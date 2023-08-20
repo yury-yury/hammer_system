@@ -144,11 +144,20 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'phone', 'referral_code', 'first_name', 'last_name',
                   'email', 'other_referral_code', 'entered_referral_code']
 
-    def get_entered_referral_code(self, obj):
+    def get_entered_referral_code(self, obj: User) -> list:
+        """
+        The get_entered_referral_code function creates a queriset from related class instances
+        and serializes them for comfortable display.
+        """
         queryset = User.objects.filter(else_referral_code=obj)
         return [ProfileForeignSerializer(q).data for q in queryset]
 
-    def is_valid(self, *, raise_exception=False):
+    def is_valid(self, *, raise_exception=False) -> bool:
+        """
+        The is_valid function complements the functionality of the base class method.
+        When entering a referral code, it makes the corresponding changes in user instances.
+        It then calls the base class method.
+        """
         else_referral_code = self.initial_data.get('other_referral_code', None)
         if else_referral_code is not None:
             if self.instance.else_referral_code is not None:
