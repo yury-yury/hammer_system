@@ -1,0 +1,214 @@
+{
+	"info": {
+		"_postman_id": "1ef3f899-2d5c-4b01-9d2d-de2732e0bf4e",
+		"name": "Referral system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24610581"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:8000/login/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phone\": \"+79624467671\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/login/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"login",
+						""
+					]
+				},
+				"description": "Calling the API to get a 4-digit authorization token."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/verify/9",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phone\": \"+79624467671\",\n    \"token\": \"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/verify/9",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"verify",
+						"9"
+					]
+				},
+				"description": "Calling the API with a message of the received authorization confirmation token (in this implementation, the token is displayed in the console) and the user's phone number."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/profile/",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 77ab23dec84f8117a461722479ba8c9c4fce8775",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/profile/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"profile",
+						""
+					]
+				},
+				"description": "Request to get a user profile. The endpoint is closed by restricting access to authenticated users only. To gain access, you must specify the received authentication token in the request header."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/profile/",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 77ab23dec84f8117a461722479ba8c9c4fce8775",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\": \"Yury\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/profile/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"profile",
+						""
+					]
+				},
+				"description": "Request to edit the data of the current user. The endpoint is closed by restricting access to unauthorized users."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/profile/",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 77ab23dec84f8117a461722479ba8c9c4fce8775",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"other_referral_code\": \"YEQhkw\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/profile/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"profile",
+						""
+					]
+				},
+				"description": "Request to enter another user's referral code."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/profile/",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 77ab23dec84f8117a461722479ba8c9c4fce8775",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/profile/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"profile",
+						""
+					]
+				},
+				"description": "Request to check the correctness of changing the data of the current user."
+			},
+			"response": []
+		}
+	]
+}
