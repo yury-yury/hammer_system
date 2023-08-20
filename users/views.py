@@ -80,8 +80,19 @@ class ProfileView(RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated, ]
 
     def get_object(self) -> User:
+        """
+        The get_object function overrides the method of the parent class, replaces the logic of getting the object
+        of the work of the methods. Makes it possible for the view to work without explicitly specifying an object
+        as a URL parameter. Restricts access to profiles of other users. When called,
+        the method takes no other parameters than its own instance of the class.
+        Returns an instance of the authorized user who made the request.
+        """
         return self.request.user
 
     @extend_schema(deprecated=True)
     def put(self, request, *args, **kwargs):
+        """
+        The put function overrides the parent class method. Disables its functionality, since the use of the method
+        is not provided for by this implementation. Raises a NotImplementedError when accessed.
+        """
         raise NotImplementedError
