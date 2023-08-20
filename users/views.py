@@ -62,7 +62,8 @@ class VerifyTokenView(APIView):
                     # Return our key for consumption.
                     return Response(token_serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response({'detail': 'Couldn\'t log you in. Try again later.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'Couldn\'t log you in. Try again later.'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProfileView(RetrieveUpdateAPIView):

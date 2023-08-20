@@ -22,7 +22,7 @@ class LoginSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", )
         fields = ("id", "phone")
 
-    def create(self, validated_data) -> User:
+    def create(self, validated_data: dict) -> User:
         """
         The create function overrides the base class method. Retrieves the user object from the database,
         creates it if it does not exist. Produces the creation of a 4-digit digital token for authentication.
@@ -41,6 +41,9 @@ class LoginSerializer(serializers.ModelSerializer):
 
 
 class TokenField(serializers.CharField):
+    """
+    The TokenField class extends the CharField serializer field class from the rest_framework.serializers module.
+    """
     default_error_messages = {
         'required': 'Invalid Token',
         'invalid': 'Invalid Token',
@@ -98,14 +101,16 @@ class VerifyTokenSerializer(serializers.Serializer):
         except User.DoesNotExist:
             raise serializers.ValidationError('Invalid user provided.')
         except ValidationError:
-            raise serializers.ValidationError('Invalid alias parameters provided.')
+            raise serializers.ValidationError('Invalid parameters provided.')
         else:
             return attrs
 
 
 class TokenResponseSerializer(serializers.Serializer):
     """
-    Our default response serializer.
+    The TokenResponseSerializer class inherits from the parent Serializer class
+    from the rest_framework.serializers module.
+    Represents a serializer for convenient serialization and deserialization of objects of the Token class.
     """
     token = serializers.CharField(source='key')
     key = serializers.CharField(write_only=True)
@@ -134,12 +139,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         else_referral_code = self.initial_data.get('other_referral_code', None)
         if else_referral_code is not None:
             if self.instance.else_referral_code is not None:
-                raise serializers.ValidationError('Активировать инвайт код можно только один раз.')
+                raise serializers.ValidationError('You can activate the invite code only once.')
             else:
                 try:
                     else_user = User.objects.get(referral_code=else_referral_code)
                 except User.DoesNotExist:
-                    raise serializers.ValidationError('Введен некорректный код')
+                    raise serializers.ValidationError('Incorrect code entered.')
                 else:
                     self.instance.else_referral_code = else_user
                     self.instance.save()

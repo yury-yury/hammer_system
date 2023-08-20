@@ -9,10 +9,10 @@ def generate_numeric_token() -> str:
     The utility function generate_numeric_token takes no parameters.
     When called, generates a string of 4 random digits. Returns the result as a string.
     """
-    # return get_random_string(length=4, allowed_chars=string.digits)
+    return get_random_string(length=4, allowed_chars=string.digits)
 
     # For the purpose of testing the service on a remote service, the function has been changed to a stub
-    return '1234'
+    # return '1234'
 
 
 def generate_referral_code() -> str:
