@@ -59,6 +59,12 @@ class VerifyTokenView(APIView):
     permission_classes = [AllowAny,]
 
     def post(self, request, *args, **kwargs) -> Response:
+        """
+        The post function overrides the logic of the parent class method. When the method is called,
+        it calls the validation of the received data using the serializer, creates or receives an authorization token.
+        On success, it returns a Response object containing the authorization token; on invalid data,
+        it returns a Response object containing a description of the error.
+        """
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.validated_data['user']
