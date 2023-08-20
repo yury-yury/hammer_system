@@ -84,6 +84,10 @@ class VerifyTokenSerializer(serializers.Serializer):
     token = TokenField(min_length=4, max_length=4, validators=[token_age_validator])
 
     def validate(self, attrs: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        The validate function overrides a class method. It takes as parameters an object in the form of a dictionary.
+        Performs validation of the received data, supplements them and returns them as a dictionary.
+        """
         try:
             callback_token = attrs.get('token', None)
             phone = attrs.get('phone', None)
@@ -117,12 +121,21 @@ class TokenResponseSerializer(serializers.Serializer):
 
 
 class ProfileForeignSerializer(serializers.ModelSerializer):
+    """
+    The ProfileForeignSerializer class is designed to conveniently provide data from related models.
+    Inherited from the ModelSerializer class from the rest_framework.serializers module.
+    """
     class Meta:
         model = User
         fields = ['phone', ]
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    """
+    The ProfileSerializer class is a serializer for convenient serialization and deserialization of objects
+    when making requests to the ProfileView using the GET and PATCH methods.
+    Inherited from the ModelSerializer class from the rest_framework.serializers module.
+    """
     other_referral_code = serializers.CharField(write_only=True)
     entered_referral_code = serializers.SerializerMethodField()
 
