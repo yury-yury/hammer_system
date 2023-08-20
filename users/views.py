@@ -1,5 +1,6 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -30,7 +31,7 @@ class LoginView(CreateAPIView):
 
         data = {
             "user": serializer.data,
-            "opt_page": f"http://127.0.0.1:8000/verify/{serializer.data['id']}"
+            "next_page": f"http://127.0.0.1:8000/verify/{serializer.data['id']}"
         }
 
         if serializer.is_valid:
@@ -44,20 +45,21 @@ class LoginView(CreateAPIView):
 @method_decorator(csrf_exempt, name='dispatch')
 class VerifyTokenView(APIView):
     """
-    CBV для авторизации
+    The VerifyTokenView class is a CBV for handling a POST request to the /verify/<int:pk> URL.
+    Inherited from the APIView base class from the rest_framework.views module.
+    Provides verification of the entered authentication confirmation token and generation of a user authorization token.
     """
     serializer_class = VerifyTokenSerializer
     permission_classes = [AllowAny,]
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> Response:
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.validated_data['user']
             auth_token = create_authentication_token(user)
 
             if auth_token:
-                TokenSerializer = TokenResponseSerializer
-                token_serializer = TokenSerializer(data={"token": auth_token.key, }, partial=True)
+                token_serializer = TokenResponseSerializer(data={"token": auth_token.key, }, partial=True)
                 if token_serializer.is_valid():
                     # Return our key for consumption.
                     return Response(token_serializer.data, status=status.HTTP_200_OK)
@@ -67,6 +69,12 @@ class VerifyTokenView(APIView):
 
 
 class ProfileView(RetrieveUpdateAPIView):
+    """
+    The ProfileView class is a CBV for handling GET and PATCH requests made to the URL '/profile/'.
+    Provides viewing the profile of the current user and changing his data,
+    also contains functionality that provides the input of a referral code.
+    Inherited from the base generic RetrieveUpdateAPIView from the rest_framework.generics module.
+    """
     queryset = User.objects.filter(is_active=True)
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated, ]
@@ -74,5 +82,6 @@ class ProfileView(RetrieveUpdateAPIView):
     def get_object(self) -> User:
         return self.request.user
 
+    @extend_schema(deprecated=True)
     def put(self, request, *args, **kwargs):
         raise NotImplementedError
