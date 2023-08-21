@@ -88,9 +88,11 @@ class VerifyTokenSerializer(serializers.Serializer):
         The validate function overrides a class method. It takes as parameters an object in the form of a dictionary.
         Performs validation of the received data, supplements them and returns them as a dictionary.
         """
+        callback_token = attrs.get('token', None)
+        phone = attrs.get('phone', None)
+        if callback_token is None or phone is None:
+            raise serializers.ValidationError('User authentication data is not provided.')
         try:
-            callback_token = attrs.get('token', None)
-            phone = attrs.get('phone', None)
             user = User.objects.get(phone=phone)
             CallbackToken.objects.filter(user=user, key=callback_token, is_active=True).first()
             attrs['user'] = user
