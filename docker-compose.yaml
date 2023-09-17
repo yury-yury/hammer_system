@@ -6,13 +6,12 @@ services:
   api:
     build:
       context: .
-#    image: yuryyury/hammer_system
     container_name: api
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     volumes:
-      - /home/yury/SkyPro/test_task/hammer_system_2/.env:/todolist/.env
+      - ${DIR_HOME}/.env:/hammer_system_2/.env
     depends_on:
       postgres:
         condition: service_healthy
@@ -22,10 +21,9 @@ services:
   migrations:
     build:
       context: .
-#    image: yuryyury/hammer_system
     container_name: migrations
     volumes:
-      - /home/yury/SkyPro/test_task/hammer_system_2/.env:/todolist/.env
+       - ${DIR_HOME}/.env:/hammer_system_2/.env
 
     command: python3 manage.py migrate
 
@@ -37,19 +35,16 @@ services:
       image: postgres:15.0-alpine
 
       environment:
-#        POSTGRES_DB: ${DB_NAME}
-#        POSTGRES_USER: ${DB_USER}
-#        POSTGRES_PASSWORD: ${DB_PASSWORD}
-        POSTGRES_DB: hammer_system
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: ${DB_NAME}
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
 
       restart: always
 
       container_name: postgres
 
       volumes:
-        - /home/yury/SkyPro/test_task/hammer_system_2/postgresdata:/var/lib/postgresql/data
+        - ${DIR_HOME}/postgresdata:/var/lib/postgresql/data
       healthcheck:
         test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
         interval: 5s
